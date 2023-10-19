@@ -1,0 +1,92 @@
+hanko-auth,
+hanko-profile {
+  /* Color Scheme */
+  --color: #333333;
+  --color-shade-1: #8f9095;
+  --color-shade-2: #e5e6ef;
+
+  --brand-color: #506cf0;
+  --brand-color-shade-1: #6b84fb;
+  --brand-contrast-color: white;
+
+  --background-color: white;
+  --error-color: #e82020;
+  --link-color: #506cf0;
+
+  /* Font Styles */
+  --font-weight: 400;
+  --font-size: 16px;
+  --font-family: sans-serif;
+
+  /* Border Styles */
+  --border-radius: 8px;
+  --border-style: solid;
+  --border-width: 1px;
+
+  /* Item Styles */
+  --item-height: 34px;
+  --item-margin: 0.5rem 0;
+
+  /* Container Styles */
+  --container-padding: 30px;
+  --container-max-width: 410px;
+
+  /* Headline Styles */
+  --headline1-font-size: 24px;
+  --headline1-font-weight: 600;
+  --headline1-margin: 0 0 1rem;
+
+  --headline2-font-size: 16px;
+  --headline2-font-weight: 600;
+  --headline2-margin: 1rem 0 0.5rem;
+
+  /* Divider Styles */
+  --divider-padding: 0 42px;
+  --divider-visibility: visible;
+
+  /* Link Styles */
+  --link-text-decoration: none;
+  --link-text-decoration-hover: underline;
+
+  /* Input Styles */
+  --input-min-width: 14em;
+
+  /* Button Styles */
+  --button-min-width: max-content;
+}
+
+hanko-profile::part(container) {
+  @apply dark:bg-black dark:text-white/95;
+}
+
+hanko-auth::part(container) {
+  @apply shadow-2xl rounded-lg bg-[#];
+}
+
+hanko-auth::part(headline1) {
+  @apply text-black text-center;
+}
+
+hanko-auth::part(text-input) {
+  @apply px-4 py-2.5 rounded-md shadow-lg text-black placeholder-white placeholder-opacity-75 focus:outline-none ring-2;
+}
+
+hanko-auth::part(passcode-input) {
+  @apply border-blue-400 focus:outline-none focus:border-blue-500;
+}
+
+hanko-auth::part(link) {
+  @apply text-black;
+}
+
+hanko-auth::part(primary-button) {
+  @apply text-center rounded-full shadow-lg text-white bg-pink-500 focus:outline-none;
+}
+
+hanko-auth::part(primary-button):hover {
+  @apply bg-pink-600;
+}
+
+hanko-auth::part(secondary-button) {
+  @apply text-center rounded-xl shadow-lg;
+}
