@@ -3,3 +3,9 @@
 @tailwind utilities;
 
 @import "hanko.css";
+
+@media (max-width: 768px) {
+  .no-left-margin {
+    margin-left: 0 !important; /* Use !important to ensure it overrides other styles */
+  }
+}

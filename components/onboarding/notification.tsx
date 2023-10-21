@@ -20,15 +20,21 @@ const socials = [
   },
 ];
 
-interface NotificationCards {
+interface NotificationCardsProps {
   name: string;
   icon: string;
   mockTime: string;
+  pushRight: number;
 }
 
-function NotificationCards(props: NotificationCards) {
+function NotificationCards(props: NotificationCardsProps) {
   return (
-    <Card className="max-w-[400px] pr-8  dark:shadow-md dark:shadow-cyan-500/50">
+    <Card
+      className={`no-left-margin max-w-[400px]  pr-8 dark:shadow-md dark:shadow-cyan-500/50`}
+      style={{
+        marginLeft: `${props.pushRight / 2}vmin`,
+      }}
+    >
       <CardHeader className="flex gap-3">
         <Image
           alt={props.name}
@@ -36,16 +42,16 @@ function NotificationCards(props: NotificationCards) {
           radius="sm"
           src={props.icon}
           width={40}
-          className="h-10 w-30 object-cover"
+          className="h-10 w-32 object-cover"
         />
-        <div className="flex flex-col relative">
-          <p className="text-md">New Message</p>
+        <div className="relative flex flex-col">
+          <p className="text-medium">New Message</p>
           <p className="text-small text-default-500">
             The username <span className="text-blue-700">@zoe</span> is
             available on {props.name}!
           </p>
         </div>
-        <span className="absolute right-4 top-2 font-semibold text-xs">
+        <span className="absolute right-4 top-2 text-xs font-semibold">
           {props.mockTime}
         </span>
       </CardHeader>
@@ -58,13 +64,13 @@ export default function Notification() {
     <div className="flex flex-col gap-y-5  p-3">
       {socials.map((social, i) => {
         return (
-          <div key={`${social}_${i}`} className={`md:ml-${i * 10} ml-0`}>
-            <NotificationCards
-              name={social.name}
-              icon={social.icon}
-              mockTime={social.mockTime}
-            />
-          </div>
+          <NotificationCards
+            name={social.name}
+            icon={social.icon}
+            mockTime={social.mockTime}
+            pushRight={i * 10}
+            key={`${social.name}_${i}`}
+          />
         );
       })}
     </div>

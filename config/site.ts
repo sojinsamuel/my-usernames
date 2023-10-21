@@ -6,34 +6,26 @@ export const siteConfig = {
     "Find Available Social Media Username in Realtime over multiple platforms at the same time.",
   navItems: [
     {
-      label: "Usernames",
-      href: "/",
-    },
-    {
-      label: "Domains",
-      href: "/domains",
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Account",
+      href: "/account",
     },
   ],
   navMenuItems: [
     {
-      label: "Usernames",
+      label: "Home",
       href: "/",
     },
     {
-      label: "Domains",
-      href: "/domains",
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Account",
+      href: "/account",
     },
     {
       label: "Login",
       href: "/login",
+    },
+    {
+      label: "Dashboard",
+      href: "/dashboard",
     },
   ],
 };

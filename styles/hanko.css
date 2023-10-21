@@ -55,20 +55,20 @@ hanko-profile {
   --button-min-width: max-content;
 }
 
-hanko-profile::part(container) {
-  @apply dark:bg-black dark:text-white/95;
-}
-
 hanko-auth::part(container) {
-  @apply shadow-2xl rounded-lg bg-[#];
+  @apply shadow-2xl rounded-lg z-20 relative bg-transparent ring-1 ring-white;
 }
 
 hanko-auth::part(headline1) {
-  @apply text-black text-center;
+  @apply text-center text-white;
+}
+
+hanko-auth::part(paragraph) {
+  @apply text-center text-white;
 }
 
 hanko-auth::part(text-input) {
-  @apply px-4 py-2.5 rounded-md shadow-lg text-black placeholder-white placeholder-opacity-75 focus:outline-none ring-2;
+  @apply px-4 py-2.5 rounded-md shadow-lg text-black placeholder-white placeholder-opacity-75 focus:outline-none ring-0 placeholder:text-black;
 }
 
 hanko-auth::part(passcode-input) {
@@ -76,17 +76,35 @@ hanko-auth::part(passcode-input) {
 }
 
 hanko-auth::part(link) {
-  @apply text-black;
+  @apply text-[#FCCB06];
+}
+
+hanko-auth::part(error) {
+  @apply text-[#FFD700] bg-transparent border-red-700;
 }
 
 hanko-auth::part(primary-button) {
-  @apply text-center rounded-full shadow-lg text-white bg-pink-500 focus:outline-none;
+  @apply text-center rounded-full shadow-lg text-black bg-white focus:outline-none ring-0;
 }
 
 hanko-auth::part(primary-button):hover {
-  @apply bg-pink-600;
+  @apply bg-white/80;
 }
 
 hanko-auth::part(secondary-button) {
-  @apply text-center rounded-xl shadow-lg;
+  @apply text-center rounded-xl shadow-lg ring-0;
+}
+
+/* Hanko Profile Elements */
+
+hanko-profile::part(container) {
+  @apply dark:text-white/95 flex bg-transparent;
+}
+
+hanko-profile::part(headline1) {
+  @apply text-center dark:text-white;
+}
+
+hanko-profile::part(paragraph) {
+  @apply text-center dark:text-white;
 }

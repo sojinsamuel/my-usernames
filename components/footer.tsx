@@ -6,9 +6,9 @@ import React from "react";
 
 function Footer() {
   const pathname = usePathname();
-  if (pathname === "/login") return null;
+  if (pathname !== "/") return null;
   return (
-    <footer className="w-full flex items-center justify-center py-3">
+    <footer className="flex w-full items-center justify-center py-3">
       <Link
         isExternal
         className="flex items-center gap-1 text-current"

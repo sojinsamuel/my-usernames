@@ -1,29 +1,30 @@
 "use client";
 
-import HankoAuth from "@/components/hanko-components/HankoAuth";
+import dynamic from "next/dynamic";
 import { Card, CardBody } from "@nextui-org/react";
-import { usePathname } from "next/navigation";
-import { subtitle, title } from "@/components/primitives";
-import SquigglyLines from "@/components/marker";
-import {
-  DocumentMagnifyingGlassIcon,
-  BellAlertIcon,
-} from "@heroicons/react/24/solid";
+import { title } from "@/components/primitives";
+import SquigglyLines from "@/components/markers/squiggly-lines";
+import { DocumentMagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Link } from "@nextui-org/link";
 
+const HankoAuth = dynamic(
+  () => import("@/components/hanko-components/HankoAuth"),
+  {
+    ssr: false,
+  }
+);
+
 export default function LoginPage() {
-  const pathname = usePathname();
-  if (pathname !== "/login") return null;
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 items-center justify-center min-h-screen overflow-hidden ">
+    <div className="grid min-h-screen grid-cols-1 items-center justify-center overflow-hidden md:grid-cols-2 ">
       <Card
         isBlurred
         shadow="sm"
         radius="none"
-        className="border-none  md:w-full md:h-full  w-0 h-0 leading-10 flex flex-col justify-center items-center "
+        className="flex  h-0 w-0  flex-col items-center justify-center border-none bg-white leading-10 md:h-full md:w-full"
       >
-        <CardBody className="flex justify-center items-center relative ">
-          <div className="absolute top-5 left-6">
+        <CardBody className="relative flex items-center justify-center opacity-100 ">
+          <div className="absolute left-6 top-5">
             <Link
               href="/"
               color="foreground"
@@ -33,10 +34,10 @@ export default function LoginPage() {
                 <DocumentMagnifyingGlassIcon height={50} width={50} />
               }
             >
-              <p className="font-bold text-inherit">Available</p>
+              <p className=" font-bold ">Available</p>
             </Link>
           </div>
-          <div className=" max-w-lg text-center  items-center">
+          <div className=" max-w-lg items-center  text-center">
             <h1 className={title()}>The Fastest way&nbsp;</h1>
             <br />
             <h1 className={title()}>to be&nbsp;notified!</h1>
@@ -57,7 +58,7 @@ export default function LoginPage() {
           </div>
         </CardBody>
       </Card>
-      <div className="flex items-center justify-center bg-gradient-to-r from-[#5EA2EF] to-[#0072F5] min-h-screen">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-[#5EA2EF] to-[#0072F5]">
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-3xl font-bold text-black">Welcome back</h1>
           <p className="text-gray-200">Sign in to your account to continue</p>
