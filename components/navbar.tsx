@@ -13,7 +13,6 @@ import {
 import { Link } from "@nextui-org/link";
 import {
   DocumentMagnifyingGlassIcon,
-  AtSymbolIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/solid";
 import { link as linkStyles } from "@nextui-org/theme";
@@ -23,16 +22,8 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+// import LogOut from "./LogOut";
 import LoggedIn from "./logged-in";
-
-const NavItemIcon = (label: string) => {
-  switch (label) {
-    case "Usernames":
-      return <AtSymbolIcon width={20} height={25} />;
-    default:
-      return <GlobeAltIcon width={20} height={25} />;
-  }
-};
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -60,7 +51,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                {NavItemIcon(item.label)}&nbsp;{item.label}
+                {<GlobeAltIcon width={20} height={25} />} {item.label}
               </NextLink>
             </NavbarItem>
           ))}
@@ -99,7 +90,7 @@ export const Navbar = () => {
                 href={item.href}
                 size="lg"
               >
-                {NavItemIcon(item.label)}&nbsp;{item.label}
+                {<GlobeAltIcon width={20} height={25} />}&nbsp;{item.label}
               </Link>
             </NavbarMenuItem>
           ))}

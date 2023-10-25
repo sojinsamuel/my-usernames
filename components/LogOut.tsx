@@ -1,32 +1,34 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { hanko } from "@/config/hankoInit";
+import { Hanko } from "@teamhanko/hanko-elements";
 import { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { NoSymbolIcon } from "@heroicons/react/24/solid";
-type UserDetails = { id: string; email: string };
 
-export function LogoutBtn() {
+const hankoApi = process.env.NEXT_PUBLIC_HANKO_API_URL!;
+
+// type UserDetails = { id: string; email: string };
+
+export default function LogOut() {
   const router = useRouter();
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
+  const [hanko, setHanko] = useState<Hanko>();
+  // const [userDetails, setUserDetails] = useState<UserDetails | null>();
 
   useEffect(() => {
-    async function getCurrentUser() {
-      const currentUser = await hanko?.user.getCurrent();
-      setUserDetails(currentUser);
-    }
-    if (userDetails) return;
-    getCurrentUser();
-  }, [userDetails]);
-
-  async function logger(location: string) {
-    console.log(
-      `${location}--- \nuser-id: ${userDetails?.id}, email: ${userDetails?.email}`
+    import("@teamhanko/hanko-elements").then(({ Hanko }) =>
+      setHanko(new Hanko(hankoApi))
     );
-  }
+  }, []);
 
-  if (userDetails) logger("plane");
+  // useEffect(() => {
+  //   async function getCurrentUser() {
+  //     const currentUser = await hanko?.user.getCurrent();
+  //     // setUserDetails(currentUser);
+  //   }
+  //   if (hanko) return;
+  //   getCurrentUser();
+  // }, [hanko]);
 
   const logout = async () => {
     try {
@@ -41,7 +43,6 @@ export function LogoutBtn() {
   return (
     <Button
       startContent={<NoSymbolIcon width={20} height={20} />}
-      className=""
       variant="solid"
       color="danger"
       onClick={logout}

@@ -21,7 +21,7 @@ export default function LoginPage() {
         isBlurred
         shadow="sm"
         radius="none"
-        className="flex  h-0 w-0  flex-col items-center justify-center border-none bg-white leading-10 md:h-full md:w-full"
+        className="flex  h-0 w-0  flex-col items-center justify-center border-none bg-white leading-10 dark:bg-black md:h-full md:w-full"
       >
         <CardBody className="relative flex items-center justify-center opacity-100 ">
           <div className="absolute left-6 top-5">

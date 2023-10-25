@@ -1,17 +1,25 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { hanko } from "@/config/hankoInit";
+import { Hanko } from "@teamhanko/hanko-elements";
+
+const hankoApi = process.env.NEXT_PUBLIC_HANKO_API_URL!;
 
 type UserDetails = { id: string; email: string };
 
 function LoggedIn() {
   const router = useRouter();
+  const [hanko, setHanko] = useState<Hanko>();
   const [userDetails, setUserDetails] = useState<UserDetails | null>();
+
+  useEffect(() => {
+    import("@teamhanko/hanko-elements").then(({ Hanko }) =>
+      setHanko(new Hanko(hankoApi))
+    );
+  }, []);
 
   useEffect(() => {
     async function getCurrentUser() {
@@ -29,7 +37,7 @@ function LoggedIn() {
     if (!userDetails) {
       getCurrentUser();
     }
-  }, []);
+  }, [hanko]);
 
   if (!userDetails) {
     return (

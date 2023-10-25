@@ -1,114 +1,156 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
-  Divider,
   ScrollShadow,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
-import { TwitterIcon } from "@/components/icons";
 import { subtitle, title } from "@/components/primitives";
 import AddCheck from "@/components/add-check";
+import { useRouter } from "next/navigation";
+import { Hanko } from "@teamhanko/hanko-elements";
+import { timeAgo } from "@/utils/time";
+import CardMock from "@/components/CardMock";
+import NoChecksYet from "@/components/NoChecksYet";
 
-const mockData = [
-  {
-    username: "vincent",
-    available: true,
-    lastChecked: "5 min ago",
-  },
-  {
-    username: "mathew",
-    available: false,
-    lastChecked: "10 min ago",
-  },
-  {
-    username: "lia",
-    available: false,
-    lastChecked: "2h ago",
-  },
-  {
-    username: "kevin",
-    available: true,
-    lastChecked: "50min ago",
-  },
-  {
-    username: "john",
-    available: false,
-    lastChecked: "10h ago",
-  },
-  {
-    username: "ravi",
-    available: false,
-    lastChecked: "3min ago",
-  },
-];
+const hankoApi = process.env.NEXT_PUBLIC_HANKO_API_URL!;
+const hanko = new Hanko(hankoApi);
 
 function AvailabilityCard(props: any) {
+  const { availables, username } = props;
+  console.log("====================================");
+  console.log(availables, username);
+  console.log("====================================");
   return (
     <>
       <h1 className={`${subtitle()} `}>@{props.username}</h1>
-      <Card className="mx-auto md:min-w-[90vh]">
-        <CardHeader className="flex items-center justify-center">
-          <TwitterIcon size={30} className="mr-2" />
-          <div className="flex items-center justify-between gap-6 md:gap-14">
-            <p>
-              <span className="text-gray-600">twitter.com</span>/
+      <Table
+        hideHeader
+        shadow="lg"
+        aria-label="Track username availbility dynamically"
+      >
+        <TableHeader>
+          <TableColumn>Username</TableColumn>
+          <TableColumn>Available</TableColumn>
+          <TableColumn>Last Checked</TableColumn>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <span className="text-gray-500">snapchat.com/</span>
               {props.username}
-            </p>
-            <p
+            </TableCell>
+            <TableCell
               className={`${
                 props.available ? "text-green-700" : "text-red-700"
               }`}
             >
-              {props.available ? "Available 🙌" : "Unavailable"}
-            </p>
-            <p className="">{props.lastChecked}</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardHeader className="flex  justify-center ">
-          <TwitterIcon size={30} className="mr-2" />
-          <div className="flex items-center justify-between gap-6 md:gap-14">
-            <p>
-              <span className="text-gray-600">instagram.com</span>/
+              {props.available ? "Available" : "Unavailable"}
+            </TableCell>
+            <TableCell>{timeAgo(props.lastChecked)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <span className="text-gray-500">facebook.com/</span>
               {props.username}
-            </p>
-            <p
+            </TableCell>
+            <TableCell
               className={`${
                 props.available ? "text-green-700" : "text-red-700"
               }`}
             >
-              {props.available ? "Available 🙌" : "Unavailable"}
-            </p>
-            <p>{props.lastChecked}</p>
-          </div>
-        </CardHeader>
-        <Divider />
-        <CardHeader className="flex items-center justify-center">
-          <TwitterIcon size={30} className="mr-2" />
-          <div className="flex items-center justify-between gap-6 md:gap-14">
-            <p>
-              <span className="text-gray-600">reddit.com/user</span>/
+              {props.available ? "Available" : "Unavailable"}
+            </TableCell>
+            <TableCell>{timeAgo(props.lastChecked)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <span className="text-gray-500">youtube.com/</span>
               {props.username}
-            </p>
-            <p
+            </TableCell>
+            <TableCell
               className={`${
                 props.available ? "text-green-700" : "text-red-700"
               }`}
             >
-              {props.available ? "Available 🙌" : "Unavailable"}
-            </p>
-            <p>{props.lastChecked}</p>
-          </div>
-        </CardHeader>
-      </Card>
+              {props.available ? "Available" : "Unavailable"}
+            </TableCell>
+            <TableCell>{timeAgo(props.lastChecked)}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </>
   );
 }
 
 export default function Dashboard() {
+  const [userId, setUserId] = useState("");
+  const [usernameStats, setUsernameStats] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+  async function getCurrentUser() {
+    const currentUser = await hanko?.user.getCurrent();
+    setUserId(currentUser?.id);
+    const res = await fetch("/api/user-in-db", {
+      method: "POST",
+      body: JSON.stringify({
+        id: currentUser?.id,
+        email: currentUser?.email,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const dbUser = await res.json();
+    // console.log("====================================");
+    // console.log(dbUser);
+    // console.log("====================================");
+    if (!dbUser) {
+      router.push("/auth-callback?origin=dashboard");
+    }
+    return true;
+  }
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    async function getChecks() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/get-checks", {
+          method: "POST",
+          body: JSON.stringify({
+            id: userId,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log("Fetched", { data });
+        setUsernameStats(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        console.log({ usernameStats });
+        setLoading(false);
+      }
+    }
+    getChecks();
+  }, [userId]);
+
   return (
     <div className="flex items-center justify-center">
       <Card className="w-[100vw] md:min-w-[50vw]">
@@ -121,17 +163,21 @@ export default function Dashboard() {
           >
             We&apos;ll notify you if any becomes available
           </p>
-          <AddCheck />
+          {/* @ts-ignore */}
+          <AddCheck id={userId} setUsernameStats={setUsernameStats} />
         </div>
         <ScrollShadow className="h-[400px]">
           <CardBody className="space-y-5">
-            {mockData.map((item, i) => {
+            {usernameStats.length === 0 && loading && <CardMock />}
+            {usernameStats.length === 0 && !loading && <NoChecksYet />}
+            {usernameStats?.map((item: any, i: number) => {
               return (
                 <AvailabilityCard
-                  key={`${item.username}_${i}`}
-                  username={item.username}
+                  key={`${item.id}_${i}`}
+                  username={item.name}
                   available={item.available}
-                  lastChecked={item.lastChecked}
+                  lastChecked={item.lastCheck}
+                  availables={item.check.checks}
                 />
               );
             })}

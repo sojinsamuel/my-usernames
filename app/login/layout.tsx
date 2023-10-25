@@ -209,17 +209,17 @@ export default function LoginLayout({
                       height: 50,
                     },
                     {
-                      src: "instagram-logo.png",
+                      src: "/facebook-logo.webp",
                       width: 100,
                       height: 100,
                     },
                     {
-                      src: "/reddit-logo.png",
+                      src: "/youtube-logo.png",
                       width: 100,
                       height: 100,
                     },
                     {
-                      src: "x-logo.webp",
+                      src: "/snapchat-logo.png",
                       width: 50,
                       height: 50,
                     },

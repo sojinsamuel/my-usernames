@@ -1,8 +1,6 @@
 import { title, subtitle } from "@/components/primitives";
 import SearchInput from "@/components/form/search";
 import SquigglyLines from "@/components/markers/squiggly-lines";
-// import Schema from "@/components/schema";
-import Notification from "@/components/onboarding/notification";
 
 export default function Home() {
   return (
@@ -24,14 +22,6 @@ export default function Home() {
         </div>
 
         <SearchInput />
-
-        <Notification />
-
-        {/* 
-      // Table
-      <div className="mt-8 w-[60vw]">
-        <Schema />
-      </div> */}
       </section>
     </div>
   );

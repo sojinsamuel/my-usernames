@@ -3,8 +3,8 @@
 import dynamic from "next/dynamic";
 import { Card, CardBody, Image } from "@nextui-org/react";
 
-import { LogoutBtn } from "@/components/log-out";
-
+import LogOut from "@/components/LogOut";
+// import HankoProfile from "@/components/hanko-components/HankoProfile";
 const HankoProfile = dynamic(
   () => import("@/components/hanko-components/HankoProfile"),
   {
@@ -31,7 +31,7 @@ export default function Account() {
                 src="./profile.png"
                 width="100%"
               />
-              <LogoutBtn />
+              <LogOut />
             </div>
           </div>
 

@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -13,18 +14,17 @@ import {
 
 import { UserIcon, PlusIcon } from "@heroicons/react/24/solid";
 
-export default function AddCheck() {
+export default function AddCheck({ id, setUsernameStats }: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [username, setUsername] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [checkboxes, setCheckboxes] = useState({
-    instagram: false,
-    reddit: false,
-    X: false,
+    snapchat: false,
+    facebook: false,
+    youtube: false,
   });
 
-  const validateUsername = (username: any) =>
-    username.match(/^(?![\s@]*-)[^\s@]+$/);
+  const validateUsername = (username: any) => username.match(/^[a-zA-Z0-9_]+$/);
 
   const isInvalid = useMemo(() => {
     if (username === "") return false;
@@ -37,16 +37,62 @@ export default function AddCheck() {
     setCheckboxes({ ...checkboxes, [name]: checked });
   };
 
-  function onSubmit() {
-    console.log(username);
-    console.log(JSON.stringify(checkboxes));
-    setUsername("");
-    setCheckboxes({
-      instagram: false,
-      reddit: false,
-      X: false,
-    });
+  async function onSubmit(closeModal: () => void) {
+    // console.log(username);
+    // console.log(JSON.stringify(checkboxes));
+    try {
+      setLoading(true);
+      const res = await fetch("/api/add-check", {
+        method: "POST",
+        body: JSON.stringify({
+          id,
+          username,
+          socials: checkboxes,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // eslint-disable-next-line no-unused-vars
+      const data = await res.json();
+      // console.log(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      closeModal();
+      setUsername("");
+      setCheckboxes({
+        facebook: false,
+        snapchat: false,
+        youtube: false,
+      });
+    }
   }
+
+  useEffect(() => {
+    async function getChecks() {
+      try {
+        const res = await fetch("/api/get-checks", {
+          method: "POST",
+          body: JSON.stringify({
+            id,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        console.log("====================================");
+        console.log("Fetched", { data });
+        console.log("====================================");
+        setUsernameStats(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getChecks();
+  }, [loading]);
 
   return (
     <>
@@ -96,32 +142,32 @@ export default function AddCheck() {
 
                 <div className="flex py-2 ">
                   <Checkbox
-                    name="X"
+                    name="facebook"
                     onChange={handleCheckboxChange}
-                    checked={checkboxes.X}
+                    checked={checkboxes.facebook}
                     classNames={{
                       label: "text-lg pr-6",
                     }}
                   >
-                    X
+                    Facebook
                   </Checkbox>
                   <Checkbox
-                    name="instagram"
+                    name="snapchat"
                     onChange={handleCheckboxChange}
                     classNames={{
                       label: "text-lg pr-6",
                     }}
                   >
-                    Instagram
+                    Snapchat
                   </Checkbox>
                   <Checkbox
-                    name="reddit"
+                    name="youtube"
                     onChange={handleCheckboxChange}
                     classNames={{
                       label: "text-lg",
                     }}
                   >
-                    Reddit
+                    Youtube
                   </Checkbox>
                 </div>
               </ModalBody>
@@ -131,15 +177,15 @@ export default function AddCheck() {
                 </Button>
                 <Button
                   color="primary"
-                  onClick={onSubmit}
+                  onClick={() => onSubmit(onClose)}
                   isDisabled={
                     username.length === 0 ||
                     !Object.values(checkboxes).includes(true) ||
                     isInvalid
                   }
-                  onPress={onClose}
+                  isLoading={loading}
                 >
-                  Save Check
+                  {loading ? "Saving and checking..." : "Save and check"}
                 </Button>
               </ModalFooter>
             </>
